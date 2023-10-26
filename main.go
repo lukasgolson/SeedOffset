@@ -14,12 +14,12 @@ func main() {
 	}
 
 	if len(os.Args) < 3 {
-		fmt.Println("Please provide the roll seed as the second argument.")
+		fmt.Println("Please provide the roll rollSeed as the second argument.")
 		return
 	}
 
 	url := os.Args[1]
-	seed, err := strconv.ParseInt(os.Args[2], 10, 64)
+	rollSeed, err := strconv.ParseInt(os.Args[2], 10, 64)
 	if err != nil {
 		panic(err)
 	}
@@ -35,14 +35,14 @@ func main() {
 
 	unixMsStr := match[1]
 
-	unixMs, err := strconv.ParseInt(unixMsStr, 10, 64)
+	TSUnixMs, err := strconv.ParseInt(unixMsStr, 10, 64)
 	if err != nil {
 		panic(err)
 	}
 
-	unixNs := unixMs * 1000000
-	timestampToSeed := unixNs % (2<<31 - 1)
-	offset := seed - timestampToSeed
+	TSUnixNs := TSUnixMs * 1000000
+	expectedSeed := TSUnixNs % (2<<31 - 1)
+	offset := rollSeed - expectedSeed
 
-	fmt.Println("Expected seed: ", seed, ". Actual seed: ", timestampToSeed, ". Offset: ", offset)
+	fmt.Println("Expected rollSeed: ", expectedSeed, ". Actual rollSeed: ", rollSeed, ". Offset: ", offset)
 }
